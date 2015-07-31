@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <?php
 /**
  * Created by PhpStorm.
@@ -94,25 +93,26 @@ $cert2 = array(
 
 );
 
-// $action = $_GET['action'] ?  $_GET['action'] : false;
 
-// $r = new stdClass();
-// if ($action == 'list') {
-//     $r->certificates = $cert1;
-//     $r->requests = $cert2;
-//     echo json_encode($r);
-// }
+$action = $_GET['action'] ?  $_GET['action'] : false;
 
-// if ($action == 'deleteCertificate') {
-//     $r->success = true;
-//     echo json_encode($r);
-//     die();
-// }
-// if ($action == 'addCertificate') {
-//     $r->success = true;
-//     echo json_encode($r);
-//     die();
-// }
+$r = new stdClass();
+if ($action == 'list') {
+    $r->certificates = $cert1;
+    $r->requests = $cert2;
+    echo json_encode($r);
+}
+
+if ($action == 'deleteCertificate') {
+    $r->success = true;
+    echo json_encode($r);
+    die();
+}
+if ($action == 'addCertificate') {
+    $r->success = true;
+    echo json_encode($r);
+    die();
+}
 ?>
 
 <html ng-app="myApp">
@@ -133,49 +133,48 @@ $cert2 = array(
             if(key === 'CreationTime') return value.substring(6, 19);
             return value;
         });
-
     </script>
 </head>
 <body class="container">
-
-    <tabs>
-      <pane title="Certificates">
-        <div ng-controller="CertController as cert">
-             <br><input type="checkbox" ng-model="cert.checkBox.pin"><label>HasPIN</label><input type="checkbox" ng-model="cert.checkBox.after"><label>NotAfter</label><!--Переделать -->
-            <div class="product row" ng-repeat="certs in cert.people" ng-hide="!certs.HasPIN && cert.checkBox.pin || cert.checkBox.after && cert.dateEq(certs.NotAfter) || !certs.HasPIN && cert.checkBox.pin && cert.checkBox.after && cert.dateEq(certs.NotAfter)">
-                 
-                <h3>{{certs.SubjectName}}<em class="pull-right">ID: {{certs.CertificateId}}</em>
-                    <h4>NotAfter: ({{certs.NotAfter | date:'dd-MM-yyyy'}})
-                        NotBefore: ({{certs.NotBefore | date:'dd-MM-yyyy'}})
-                    </h4>
-                </h3>
-                <h4>Organization: {{certs.Organization}}</h4>
-                <h4>Email: {{certs.Email}}</h4>
-                <h4>HasPin: {{certs.HasPIN}}</h4>
+   <div ng-controller="CertController as sortt">
+        <select ng-model="sortt.sortBy" class="form-control" ng-options="stars for stars in sortt.sort" title="Stars"></select>
+        <tabs>
+          <pane title="Certificates">
+            <div ng-controller="CertController as cert">
+                <br><a href ng-click="sortt.sortReverse = !sortt.sortReverse">{{ sortt.sortBy }}</a>
+                <input type="checkbox" ng-model="cert.checkBox.pin"><label>HasPIN</label><input type="checkbox" ng-model="cert.checkBox.after"><label>NotAfter</label>
+                <div class="product row" ng-repeat="certs in cert.people | orderBy : sortt.sortBy:sortt.sortReverse" ng-hide="!certs.HasPIN && cert.checkBox.pin || cert.checkBox.after && cert.dateEq(certs.NotAfter) || !certs.HasPIN && cert.checkBox.pin && cert.checkBox.after && cert.dateEq(certs.NotAfter)">
+                     
+                    <h3>{{certs.SubjectName}}<em class="pull-right">ID: {{certs.CertificateId}}</em>
+                        <h4>NotAfter: ({{certs.NotAfter | date:'dd-MM-yyyy'}})
+                            NotBefore: ({{certs.NotBefore | date:'dd-MM-yyyy'}})
+                        </h4>
+                    </h3>
+                    <h4>Organization: {{certs.Organization}}</h4>
+                    <h4>Email: {{certs.Email}}</h4>
+                    <h4>HasPin: {{certs.HasPIN}}</h4>
+                    <button class="pull-right" ng-click="cert.deleteCert(certs)">Удалить</button>
+                    <button class="pull-right" ng-click="cert.addCert()">Добавить</button>
+                </div>
             </div>
-        </div>
-      </pane>
-      <pane title="Requests">
-        <div ng-controller="ReqController as req">
-            <div class="product row" ng-repeat="reqs in req.requ">
-                <h3>
-                    CreationTime: {{reqs.CreationTime | date:'dd-MM-yyyy'}}<em class="pull-right">ID: {{reqs.ID}}</em>
-                </h3>
-                <h3>ExtensionDate:</h3>
-                <ul>
-                    <li><h4>Passport: {{reqs.ExtensionDate.Passport}}</h4></li>
-                    <li><h4>SNILS: {{reqs.ExtensionData.SNILS}}</h4></li>
-                    <li><h4>Email: {{reqs.ExtensionDate.Email}}</h4></li>
-                </ul>
+          </pane>
+          <pane title="Requests">
+            <div ng-controller="CertController as req">
+                             <br><a href ng-click="sortt.sortReverse = !sortt.sortReverse">{{ sortt.sortBy }}</a>
+                <div class="product row" ng-repeat="reqs in req.requ | orderBy : sortt.sortBy:sortt.sortReverse">
+                    <h3>
+                        CreationTime: {{reqs.CreationTime | date:'dd-MM-yyyy'}}<em class="pull-right">ID: {{reqs.ID}}</em>
+                    </h3>
+                    <h3>ExtensionDate:</h3>
+                    <ul>
+                        <li><h4>Passport: {{reqs.ExtensionDate.Passport}}</h4></li>
+                        <li><h4>SNILS: {{reqs.ExtensionData.SNILS}}</h4></li>
+                        <li><h4>Email: {{reqs.ExtensionDate.Email}}</h4></li>
+                    </ul>
+                </div>
             </div>
-        </div>
-      </pane>
-    </tabs>
+          </pane>
+        </tabs>
+    </div>
 </body>
 </html>
-
-<!-- <div ng-init="positions = <?php echo htmlspecialchars(json_encode($cert1)); ?>">
-    <div ng-repeat="position in positions">
-       <p>{{position.SubjectName}}</p>
-    </div>
-</div> -->
