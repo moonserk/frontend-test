@@ -167,7 +167,7 @@ if ($action == 'addCertificate') {
                 <br>Порядок сортировки: <a href ng-click="sortt.sortReverse = !sortt.sortReverse">{{ sortt.sortBy }}</a>
                 <div class="product row" ng-repeat="reqs in req.requ | orderBy : sortt.sortBy:sortt.sortReverse">
                     <h3>
-                        CreationTime: {{reqs.CreationTime | date:'dd-MM-yyyy'}}<em class="pull-right">ID: {{reqs.ID}}</em>
+                        CreationTime: {{reqs.CreationTime | date:'dd-MMMM-yyyy'}}<em class="pull-right">ID: {{reqs.ID}}</em>
                     </h3>
                     <h3>ExtensionDate:</h3>
                     <ul>
