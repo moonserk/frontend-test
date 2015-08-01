@@ -118,6 +118,7 @@ if ($action == 'addCertificate') {
     <script type="text/javascript" src="js/angular.min.js"></script>
     <script type="text/javascript" src="js/app.js"></script>
     <script type="text/javascript" src="js/components.js"></script>
+    <script type="text/javascript" src="js/angular-locale_ru-ru.js"></script>
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <script>
@@ -150,8 +151,8 @@ if ($action == 'addCertificate') {
                      
                     <h3>{{certs.SubjectName}}<em class="pull-right">ID: {{certs.CertificateId}}</em>
                         <h4>IsTest: {{certs.IsTest}}</h4>
-                        <h4>NotAfter: ({{certs.NotAfter | date:'dd-MM-yyyy'}})
-                            NotBefore: ({{certs.NotBefore | date:'dd-MM-yyyy'}})
+                        <h4>NotAfter: ({{certs.NotAfter | date:'dd-MMMM-yyyy'}})
+                            NotBefore: ({{certs.NotBefore | date:'dd-MMMM-yyyy'}})
                         </h4>
                     </h3>
                     <h4>Organization: {{certs.Organization}}</h4>
