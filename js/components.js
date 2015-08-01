@@ -49,4 +49,27 @@ angular.module('components', [])
       replace: true
     };
   })
+
+  .directive('popUpMsg', function(){
+  return {
+    restrict: 'E',
+    scope: false,
+    templateUrl: "popup.html",
+    controller: function($scope) {
+      $scope.closePopUp = function(){
+        $scope.showPopUpMsg = false;
+      }
+    }
+  }
+})
+
+.controller('mainCtrl', function($scope){
+  $scope.showPopUpMsg = false;
+  $scope.openPopUp = function( ) {
+    $scope.showPopUpMsg = true;
+  }
+})
+
+  
+
 })();

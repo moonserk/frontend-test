@@ -46,7 +46,6 @@ $cert1 = array(
         "SubjectName"=>"Козявкин",
         "HasPIN"=>true
     ),
-
 );
 
 $cert2 = array(
@@ -90,11 +89,9 @@ $cert2 = array(
         ),
         "StatusCode"=>1
     ),
-
 );
 
-
-$action = $_GET['action'] ?  $_GET['action'] : false;
+$action = (isset($_GET['action'])) ?  $_GET['action'] : false;
 
 $r = new stdClass();
 if ($action == 'list') {
@@ -114,7 +111,7 @@ if ($action == 'addCertificate') {
     die();
 }
 ?>
-
+<!DOCTYPE html>
 <html ng-app="myApp">
 <head>
     <title>Test</title>
@@ -122,6 +119,7 @@ if ($action == 'addCertificate') {
     <script type="text/javascript" src="js/app.js"></script>
     <script type="text/javascript" src="js/components.js"></script>
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
     <script>
         var certificates = '<?php echo json_encode($cert1) ?>';
         var requests = '<?php echo json_encode($cert2) ?>';
@@ -135,17 +133,23 @@ if ($action == 'addCertificate') {
         });
     </script>
 </head>
-<body class="container">
+<body class="container indent">
    <div ng-controller="CertController as sortt">
-        <select ng-model="sortt.sortBy" class="form-control" ng-options="stars for stars in sortt.sort" title="Stars"></select>
+        <div class="pull-right" ng-controller="mainCtrl">
+            <input class="btn btn-primary pull-right" value="Добавить" ng-click="openPopUp()"/>
+            <pop-up-msg></pop-up-msg>
+        </div>
+        <select class="btn btn-primary" ng-model="sortt.sortBy" ng-options="sorts for sorts in sortt.sort" title="Sorts"></select>
+        <br><br>
         <tabs>
           <pane title="Certificates">
             <div ng-controller="CertController as cert">
-                <br><a href ng-click="sortt.sortReverse = !sortt.sortReverse">{{ sortt.sortBy }}</a>
+                <br>Порядок сортировки: <a href ng-click="sortt.sortReverse = !sortt.sortReverse">{{ sortt.sortBy }}</a>
                 <input type="checkbox" ng-model="cert.checkBox.pin"><label>HasPIN</label><input type="checkbox" ng-model="cert.checkBox.after"><label>NotAfter</label>
                 <div class="product row" ng-repeat="certs in cert.people | orderBy : sortt.sortBy:sortt.sortReverse" ng-hide="!certs.HasPIN && cert.checkBox.pin || cert.checkBox.after && cert.dateEq(certs.NotAfter) || !certs.HasPIN && cert.checkBox.pin && cert.checkBox.after && cert.dateEq(certs.NotAfter)">
                      
                     <h3>{{certs.SubjectName}}<em class="pull-right">ID: {{certs.CertificateId}}</em>
+                        <h4>IsTest: {{certs.IsTest}}</h4>
                         <h4>NotAfter: ({{certs.NotAfter | date:'dd-MM-yyyy'}})
                             NotBefore: ({{certs.NotBefore | date:'dd-MM-yyyy'}})
                         </h4>
@@ -153,14 +157,13 @@ if ($action == 'addCertificate') {
                     <h4>Organization: {{certs.Organization}}</h4>
                     <h4>Email: {{certs.Email}}</h4>
                     <h4>HasPin: {{certs.HasPIN}}</h4>
-                    <button class="pull-right" ng-click="cert.deleteCert(certs)">Удалить</button>
-                    <button class="pull-right" ng-click="cert.addCert()">Добавить</button>
+                    <input class="btn btn-primary pull-right" value="Удалить" ng-click="cert.deleteCert(certs)" />                 
                 </div>
             </div>
           </pane>
           <pane title="Requests">
             <div ng-controller="CertController as req">
-                             <br><a href ng-click="sortt.sortReverse = !sortt.sortReverse">{{ sortt.sortBy }}</a>
+                <br>Порядок сортировки: <a href ng-click="sortt.sortReverse = !sortt.sortReverse">{{ sortt.sortBy }}</a>
                 <div class="product row" ng-repeat="reqs in req.requ | orderBy : sortt.sortBy:sortt.sortReverse">
                     <h3>
                         CreationTime: {{reqs.CreationTime | date:'dd-MM-yyyy'}}<em class="pull-right">ID: {{reqs.ID}}</em>

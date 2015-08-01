@@ -1,0 +1,20 @@
+<div id="popUpMsg-bg" ng-show="showPopUpMsg">
+	<div id="popUpMsg">
+		<div class="content">
+		<form name="addForm" ng-submit="addForm.$valid && sortt.addCert()" novalidate>
+			<h4>Введите новый сертификат</h4>
+			<input ng-model="sortt.newCert.CertificateId" type="number" class="form-control sel" placeholder="CertificateID" required/>
+			<input ng-model="sortt.newCert.IsTest" class=" form-control sel" placeholder="IsTest" required/>
+			<input ng-model="sortt.newCert.NotAfter" class=" form-control sel" placeholder="NotAfter" required/>
+			<input ng-model="sortt.newCert.NotBefore" class="form-control sel" placeholder="NotBefore" required/>
+			<input ng-model="sortt.newCert.Organization" class="form-control sel" placeholder="Organization" required/>
+			<input ng-model="sortt.newCert.Email" class="form-control sel" type="email" placeholder="Email" required/>
+			<input ng-model="sortt.newCert.SubjectName" class="form-control sel" placeholder="SubjectName" required/>
+			<input ng-model="sortt.newCert.HasPIN" class="form-control sel" placeholder="HasPIN" required/>
+		<br>
+		<input type="submit" class="btn btn-primary pull-right" value="Добавить" />
+		<input class="btn btn-primary pull-left" value="Выход" ng-click="closePopUp()" />
+	</form>
+	</div>
+</div>
+</div>
